@@ -1,2 +1,2 @@
-# test-checker
-Homework checker with AI
+# exam_check
+Platform that checks student assignments as an assistant.
