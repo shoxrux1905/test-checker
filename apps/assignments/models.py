@@ -31,8 +31,7 @@ class Question(BaseModel):
     description = models.TextField()
     question_type = models.CharField(max_length=10, choices=QUESTION_TYPES)
     points = models.PositiveIntegerField(default=1)
-    created_by = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='created_questions')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_questions')
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
