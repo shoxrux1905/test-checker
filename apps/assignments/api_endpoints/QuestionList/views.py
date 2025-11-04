@@ -1,10 +1,8 @@
 from rest_framework import generics
 
-from apps.assignments.api_endpoints.QuestionList.serializers import QuestionListSerializer
-from apps.assignments.models import Question
+from apps.assignments.api_endpoints.QuestionList.serializers import AssignmentSerializer
+from apps.assignments.models import Assignment
 
-class QuestionListAPIView(generics.ListAPIView):
-    queryset = Question.objects.all()
-    serializer_class = QuestionListSerializer
-    
-    
+class AssignmentListAPIView(generics.ListAPIView):
+    queryset = Assignment.objects.all()
+    serializer_class = AssignmentSerializer
