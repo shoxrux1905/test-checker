@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.assignments.api_endpoints.assignments_serializers.views import AssignmentListCreateAPIView, AssignmentDetailAPIView
+from apps.assignments.api_endpoints.assignments.views import AssignmentListCreateAPIView, AssignmentDetailAPIView
 from apps.assignments.api_endpoints.submissions_serializers.views import SubmissionListCreateAPIView, SubmissionDetailAPIView
 
 urlpatterns = [

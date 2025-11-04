@@ -6,7 +6,7 @@ from apps.assignments.models import Assignment
 from .serializers import  AssignmentSerializer
 
 class AssignmentListCreateAPIView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+   
 
     def get(self, request):
         assignments = Assignment.objects.all()
