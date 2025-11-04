@@ -3,6 +3,6 @@ from apps.assignments.api_endpoints.submission.views.submission_create_view impo
 from apps.assignments.api_endpoints.submission.views.submission_detail_view import SubmissionDetailAPIView
 
 urlpatterns = [
-    path('submissions/create/', SubmissionCreateAPIView.as_view(), name='submission-create'),
-    path('submissions/<int:pk>/', SubmissionDetailAPIView.as_view(), name='submission-detail'),
+    path('create/', SubmissionCreateAPIView.as_view(), name='submission-create'),
+    path('<int:pk>/', SubmissionDetailAPIView.as_view(), name='submission-detail'),
 ]
