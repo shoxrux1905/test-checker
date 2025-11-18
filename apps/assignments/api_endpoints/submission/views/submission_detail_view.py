@@ -12,9 +12,10 @@ class SubmissionDetailAPIView(APIView):
     def get(self, request, pk):
         submission = get_object_or_404(Submission, pk=pk)
 
-
         if not request.user.is_superuser and submission.student != request.user:
-            return Response({"detail": "Sizga ruxsat berilmagan!"}, status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                {"detail": "Sizga ruxsat berilmagan!"}, status=status.HTTP_403_FORBIDDEN
+            )
 
         serializer = SubmissionSerializer(submission)
         return Response(serializer.data, status=status.HTTP_200_OK)
