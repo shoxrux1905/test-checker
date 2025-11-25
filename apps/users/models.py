@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from apps.common.models import BaseModel
 
+from apps.common.models import BaseModel
 
 
 class User(AbstractUser, BaseModel):
@@ -34,6 +34,7 @@ class User(AbstractUser, BaseModel):
     @property
     def is_teacher(self):
         return self.role == 'teacher'
+
 
 class StudyGroup(BaseModel):
     name = models.CharField(max_length=100, unique=True)

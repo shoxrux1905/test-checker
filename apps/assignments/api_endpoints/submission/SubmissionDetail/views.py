@@ -2,7 +2,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from django.shortcuts import get_object_or_404
-from apps.assignments.api_endpoints.submission.serializers import SubmissionSerializer
+
+from apps.assignments.api_endpoints.submission.SubmissionCreate.\
+    serializers import SubmissionSerializer
 from apps.assignments.models import Submission
 
 
@@ -19,3 +21,6 @@ class SubmissionDetailAPIView(APIView):
 
         serializer = SubmissionSerializer(submission)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+__all__ = ["SubmissionDetailAPIView"]
