@@ -30,25 +30,20 @@ class AssignmentSerializer(serializers.ModelSerializer):
         due_date = data.get("due_date")
 
        
-        # HOMEWORK RULES
        
         if assignment_type == "homework":
-            # Homework shouldn't have exam-only fields
             if start_time or end_time or duration:
                 raise serializers.ValidationError(
                     "Homework cannot have start_time, end_time, or duration_minutes."
                 )
 
-            # Homework must have due_date
             if not due_date:
                 raise serializers.ValidationError(
                     "Homework must include a due_date."
                 )
 
-        # EXAM RULES
        
         if assignment_type == "exam":
-            # Exams must have start_time, end_time, and duration
             missing = []
             if not start_time:
                 missing.append("start_time")
@@ -62,7 +57,6 @@ class AssignmentSerializer(serializers.ModelSerializer):
                     f"Exam is missing required fields: {', '.join(missing)}"
                 )
 
-            # Exam shouldn't have due_date
             if due_date:
                 raise serializers.ValidationError(
                     "Exam should not have a due_date."
