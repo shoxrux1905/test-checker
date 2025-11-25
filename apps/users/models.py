@@ -5,7 +5,8 @@ from apps.common.models import BaseModel
 
 
 class User(AbstractUser, BaseModel):
-    """User model for Admin, Student, Teacher roles"""
+    is_teacher = models.BooleanField(default=False)
+    profile_picture = models.ImageField(upload_to='profiles/', null=True, blank=True)
 
     USER_ROLES = [
         ("admin", "Admin"),
