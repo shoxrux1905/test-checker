@@ -1,9 +1,11 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.utils import timezone
+from django.core.exceptions import ValidationError
+
 from apps.common.models import BaseModel
 from apps.users.models import User
-from django.core.exceptions import ValidationError
-from django.utils import timezone
+
 
 User = get_user_model()
 
