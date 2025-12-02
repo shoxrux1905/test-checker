@@ -79,7 +79,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
             "submission",
             "submission_title",
             "reason",
-            "status"
+            "status",
             "reviewed_by",
             "reviewed_by_name",
             "review_notes",

@@ -44,3 +44,6 @@ class AssignmentDetailAPIView(APIView):
         assignment = self.get_object(pk)
         assignment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+__all__ = ["AssignmentListCreateAPIView", "AssignmentDetailAPIView"]

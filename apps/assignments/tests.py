@@ -1,3 +1,1 @@
-from django.test import TestCase
-
-# Create your tests here.
+from apps.assignments.api_endpoints.appeal.AppealDetailUpdate.tests import * # noqa F401
