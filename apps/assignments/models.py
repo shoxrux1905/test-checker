@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from apps.common.models import BaseModel
+from apps.users.models import User
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -89,28 +92,40 @@ class StudentAnswer(BaseModel):
         return f"{self.student.get_full_name()} - {self.question.title}"
 
 
-class Assignment(BaseModel):
-    """Assignment model for exams and homework"""
 
+
+class Assignment(BaseModel):
     ASSIGNMENT_TYPES = [
         ("exam", "Exam"),
         ("homework", "Homework"),
     ]
 
+    assignment_type = models.CharField(max_length=10, choices=ASSIGNMENT_TYPES)
+
     title = models.CharField(max_length=200)
     description = models.TextField()
-    assignment_type = models.CharField(max_length=10, choices=ASSIGNMENT_TYPES)
+
+    # Homework field
+    due_date = models.DateTimeField(null=True, blank=True)
+
+    # Exam fields
+    start_time = models.DateTimeField(null=True, blank=True)
+    end_time = models.DateTimeField(null=True, blank=True)
+    duration_minutes = models.PositiveIntegerField(
+        null=True, blank=True,
+        help_text="Duration in minutes (exams only)"
+    )
+
     group = models.ForeignKey(
         Group, on_delete=models.CASCADE, related_name="assignments"
     )
-    questions = models.ManyToManyField(Question, related_name="assignments", blank=True)
     created_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="created_assignments"
     )
 
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
-    duration_minutes = models.PositiveIntegerField(help_text="Duration in minutes")
+    questions = models.ManyToManyField(
+        Question, related_name="assignments", blank=True
+    )
 
     total_points = models.PositiveIntegerField(default=100)
     passing_score = models.PositiveIntegerField(default=60)
@@ -118,6 +133,49 @@ class Assignment(BaseModel):
     allow_late_submission = models.BooleanField(default=False)
 
     is_active = models.BooleanField(default=True)
+
+ 
+    # VALIDATION RULES
+
+    def clean(self):
+        errors = {}
+
+        # --- HOMEWORK RULES ---
+        if self.assignment_type == "homework":
+            if not self.due_date:
+                errors["due_date"] = "Homework must have a due date."
+
+            if self.start_time or self.end_time:
+                errors["start_time"] = "Homework should not have a start time."
+                errors["end_time"] = "Homework should not have an end time."
+
+            if self.duration_minutes:
+                errors["duration_minutes"] = "Homework does not use duration."
+
+        # --- EXAM RULES ---
+        if self.assignment_type == "exam":
+            if not self.start_time or not self.end_time:
+                errors["start_time"] = "Exam must have a start time."
+                errors["end_time"] = "Exam must have an end time."
+
+            if self.start_time and self.end_time:
+                if self.start_time >= self.end_time:
+                    errors["end_time"] = "Exam end time must be after start time."
+
+            if not self.duration_minutes:
+                errors["duration_minutes"] = "Exam must have duration in minutes."
+
+            if self.due_date:
+                errors["due_date"] = "Exam should not have a due date."
+
+        if errors:
+            raise ValidationError(errors)
+
+    # ensure validation runs on save()
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
 
     def __str__(self):
         return f"{self.title} - {self.group.name}"
